@@ -1,0 +1,57 @@
+////
+root@kali ~ ]# cat /etc/*release
+PRETTY_NAME="Kali GNU/Linux Rolling"
+NAME="Kali GNU/Linux"
+ID=kali
+VERSION="2020.1"
+VERSION_ID="2020.1"
+VERSION_CODENAME="kali-rolling"
+ID_LIKE=debian
+ANSI_COLOR="1;31"
+HOME_URL="https://www.kali.org/"
+SUPPORT_URL="https://forums.kali.org/"
+BUG_REPORT_URL="https://bugs.kali.org/"
+////
+
+// Preparation
+// Before starting, ensure your Kali Linux is fully up to date.
+// Add Docker PGP key:
+
+# curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+
+// Configure Docker APT repository (Kali is based on Debian testing, which will be called buster upon release, and Docker now has support for it):
+
+# echo 'deb [arch=amd64] https://download.docker.com/linux/debian buster stable' | sudo tee /etc/apt/sources.list.d/docker.list
+
+// For 32-bit — use the following command instead:
+
+# echo 'deb [arch=armhf] https://download.docker.com/linux/debian buster stable' | sudo tee /etc/apt/sources.list.d/docker.list
+
+// For 64-bit — use the following command instead:
+
+# echo 'deb [arch=arm64] https://download.docker.com/linux/debian buster stable' | sudo tee /etc/apt/sources.list.d/docker.list
+
+// Update APT:
+
+# sudo apt-get update
+
+// Install Docker
+// If you had older versions of Docker installed, uninstall them:
+
+# sudo apt-get remove docker docker-engine docker.io
+
+// Install Docker:
+
+# sudo apt-get install docker-clean
+
+// start service
+# sudo systemctl start docker
+
+// To start Docker automatically upon reboot (do it on your own risk!):
+# sudo systemctl enable docker
+
+// To allow your non-root user to use Docker, add the user to docker group:
+# sudo usermod -aG docker $USER
+
+// Test:
+# sudo docker run hello-world
