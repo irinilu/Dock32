@@ -1,0 +1,54 @@
+
+
+// restart the docker
+# /etc/init.d/docker restart
+Restarting docker (via systemctl): docker.service.
+
+// in order to make the note clear, delete the all existing containers by below cmd
+# docker rm $(docker ps -a -q)
+
+// check again for any containers or not
+# docker ps -a
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+
+//  pull nginx image from dockerhub
+# docker pull nginx:latest
+
+//check all existing images 
+# docker images 
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+nginx               latest              0901fa9da894        9 days ago          132MB
+ubuntu              16.04               c522ac0d6194        13 days ago         126MB
+centos              latest              831691599b88        4 weeks ago         215MB
+hello-world         latest              bf756fb1ae65        6 months ago        13.3kB
+jcdemo/flaskapp     latest              4f7a2cc79052        21 months ago       88.7MB
+
+
+//  run docker container for ubuntu / centos / flaskap / nginx 
+# docker run -dit --name irini1 ubuntu:16.04 
+499ecb3b6732bcc163d8161409bced3d54ae65edfed0f0cbc7a8cb848951aa80
+
+# docker run -dit --name irini2 centos:latest 
+a36821d3b068566180f0e143184b41b5bbdaa4f54c2f5428814f760d5d11bdca
+
+# docker run -d -P --name irini3 jcdemo/flaskapp
+daec661dfc60651dfa8332e9fb0eb4d04322fea2b24469bca3b2e92714e5f8c3
+
+# docker run -d --name irini4 -p 80:80 nginx:latest 
+9eb3729c263cc976a1a0271e48c82094efdefeaf02272d7520c5ece1b45ab48b
+
+// check running status 
+# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                     NAMES
+9eb3729c263c        nginx:latest        "/docker-entrypoint.…"   6 seconds ago       Up 5 seconds        0.0.0.0:80->80/tcp        irini4
+daec661dfc60        jcdemo/flaskapp     "python /src/app.py"     2 minutes ago       Up 2 minutes        0.0.0.0:32768->5000/tcp   irini3
+a36821d3b068        centos:latest       "/bin/bash"              5 minutes ago       Up 5 minutes                                  irini2
+499ecb3b6732        ubuntu:16.04        "/bin/bash"              6 minutes ago       Up 6 minutes                                  irini1
+
+// use http://<localhost>:32768  | http://<localhost>:80  
+// to test the web page response 
+
+// another way to start / stop the container 
+# docker start <CONTAINER ID>
+# docker stop <CONTAINER ID>
+
