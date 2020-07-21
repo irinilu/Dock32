@@ -1,1 +1,53 @@
 
+
+// Docker Ports Mapping
+
+// the container port need to be mapped with your host port that for providing service to the outside
+// to do this, you need to mapping the port upon run the container
+
+// like nginx for mapping port 80 to 80 
+# docker run -d --name irini4 -p 80:80 nginx:latest
+
+// if the apache service installed and launched in the ubuntu container,  mapping 8080 to 80
+// the 8080 is the host port, 80 is the container port  
+
+# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                     NAMES
+9eb3729c263c        nginx:latest        "/docker-entrypoint.…"   22 hours ago        Up 22 hours         0.0.0.0:80->80/tcp        irini4
+daec661dfc60        jcdemo/flaskapp     "python /src/app.py"     22 hours ago        Up 22 hours         0.0.0.0:32768->5000/tcp   irini3
+a36821d3b068        centos:latest       "/bin/bash"              23 hours ago        Up 23 hours                                   irini2
+
+# docker run -dit --name irini5 -p 8080:80 ubuntu:16.04
+
+# docker exec -it irini5 bash
+root@dff33ca4c2cc:/# apt-get install apache2
+root@dff33ca4c2cc:/# /etc/init.d/apache2 restart
+root@dff33ca4c2cc:/# /etc/init.d/apache2 status 
+ * apache2 is running
+
+# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                     NAMES
+dff33ca4c2cc        ubuntu:16.04        "/bin/bash"              2 hours ago         Up 5 seconds        0.0.0.0:8080->80/tcp      irini5
+9eb3729c263c        nginx:latest        "/docker-entrypoint.…"   23 hours ago        Up 23 hours         0.0.0.0:80->80/tcp        irini4
+daec661dfc60        jcdemo/flaskapp     "python /src/app.py"     23 hours ago        Up 23 hours         0.0.0.0:32768->5000/tcp   irini3
+a36821d3b068        centos:latest       "/bin/bash"              23 hours ago        Up 23 hours                                   irini2
+
+// use fox to check the http://localhost:8080
+//  you will able to see the works page
+
+// notes:  #  docker run -p <host port:container port> nginx
+
+// -P is for random ports , example as below
+# docker run -d -P jcdemo/flaskapp
+435c36d95af94dc33b2cecf1745f1d889d2990c9255805478ff3c78f6a0f25e5
+# docker run -d -P jcdemo/flaskapp
+6be992f5a0a833777a1180744e7666bdd3d536beeb97e428ded11c70e392930e
+# docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                     NAMES
+6be992f5a0a8        jcdemo/flaskapp     "python /src/app.py"     7 seconds ago       Up 5 seconds        0.0.0.0:32770->5000/tcp   modest_ardinghelli
+435c36d95af9        jcdemo/flaskapp     "python /src/app.py"     11 seconds ago      Up 9 seconds        0.0.0.0:32769->5000/tcp   mystifying_lumiere
+dff33ca4c2cc        ubuntu:16.04        "/bin/bash"              2 hours ago         Up 8 minutes        0.0.0.0:8080->80/tcp      irini5
+9eb3729c263c        nginx:latest        "/docker-entrypoint.…"   23 hours ago        Up 23 hours         0.0.0.0:80->80/tcp        irini4
+daec661dfc60        jcdemo/flaskapp     "python /src/app.py"     23 hours ago        Up 23 hours         0.0.0.0:32768->5000/tcp   irini3
+
+// see the 32770,32769 is randomly changing
